@@ -1,0 +1,43 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Hey",
+        "Hi there",
+        "Hello there"
+      ],
+      "responses": [
+        "Hyy! I am Parshant's personal AI assistant. How can I help you?"
+      ]
+    },
+    {
+      "tag": "current_work",
+      "patterns": [
+        "What parshant doing nowdays?",
+        "What prashant doing nowadays",
+        "What psnt doing nswdays",
+        "What does Parshant do now",
+        "What's parshant's qualifications"
+      ],
+      "responses": [
+        "Parshant is currently a BTech CSE (AI & ML) 4th year student, learning DSA and Machine Learning and building real-world projects."
+      ]
+    },
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Who is parshant?",
+        "who is prashant?",
+        "parshant kaun hai?",
+        "who parshant",
+        "tell me about parshant"
+      ],
+      "responses": [
+        "Parshant is currently a BTech CSE (AI & ML) 4th year student, learning DSA and Machine Learning and building real-world projects."
+      ]
+    }
+  ]
+}
