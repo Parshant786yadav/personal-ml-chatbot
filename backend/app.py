@@ -21,27 +21,25 @@ def no_cache_response(payload):
     response.headers["Expires"] = "0"
     return response
 
-# -------- Text Preprocessing --------
-def preprocess(sentence):
-    sentence = sentence.lower()
-    sentence = sentence.translate(str.maketrans('', '', string.punctuation))
-
-    # name normalization (VERY IMPORTANT)
-    sentence = fuzzy_name_normalize(sentence)
-    
-    return sentence
+# -------- Fuzzy Name Normalization --------
 def fuzzy_name_normalize(sentence):
     words = sentence.split()
     normalized = []
 
     for w in words:
-        # fuzzy match with "parshant"
         if fuzz.ratio(w, "parshant") >= 80:
             normalized.append("parshant")
         else:
             normalized.append(w)
 
     return " ".join(normalized)
+
+# -------- Text Preprocessing --------
+def preprocess(sentence):
+    sentence = sentence.lower()
+    sentence = sentence.translate(str.maketrans('', '', string.punctuation))
+    sentence = fuzzy_name_normalize(sentence)
+    return sentence
 
 # -------- Chat API --------
 @app.route("/chat", methods=["POST"])
@@ -53,7 +51,21 @@ def chat():
 
     processed = preprocess(user_input)
 
-    # -------- RULE 1: GREETING (NO ML) --------
+    # 🔹 Build intent → response map EARLY
+    intent_response_map = {
+        i["tag"]: i["responses"][0] for i in data["intents"]
+    }
+
+    # 🔹 PRIORITY RULE: QUALIFICATION
+    if any(word in processed for word in [
+        "qualification", "degree", "education", "course", "academic"
+    ]):
+        return no_cache_response({
+            "reply": intent_response_map["qualification"],
+            "intent": "qualification-rule"
+        })
+
+    # 🔹 RULE 1: GREETING
     GREETINGS = {"hi", "hello", "hey", "hii", "hyy", "helo"}
 
     if processed.strip() in GREETINGS:
@@ -62,45 +74,39 @@ def chat():
             "intent": "greeting-rule"
         })
 
-    # -------- RULE 2: SHORT QUESTIONS --------
+    # 🔹 RULE 2: SHORT QUESTIONS
     if "parshant" in processed and "how" in processed:
         return no_cache_response({
             "reply": "Parshant is doing well and currently focusing on his studies and projects.",
             "intent": "rule_how_is"
         })
 
-    # -------- ML STARTS HERE --------
+    # 🔹 ML STARTS HERE
     X = vectorizer.transform([processed])
     probs = model.predict_proba(X)[0]
     intent = model.classes_[probs.argmax()]
     max_prob = float(max(probs))
 
-    # Debug (you can remove later)
     print("INPUT:", user_input)
     print("PROCESSED:", processed)
     print("INTENT:", intent)
     print("PROBABILITY:", max_prob)
 
-    # Intent → response map
-    intent_response_map = {
-        i["tag"]: i["responses"][0] for i in data["intents"]
-    }
-
-    # -------- GREETING VIA ML (BACKUP) --------
+    # 🔹 ML GREETING BACKUP
     if intent == "greeting":
         return no_cache_response({
             "reply": intent_response_map["greeting"],
             "intent": intent
         })
 
-    # -------- FALLBACK --------
+    # 🔹 FALLBACK
     if max_prob < 0.2:
         return no_cache_response({
-            "reply": "I can answer questions related to Parshant only. Please rephrase.",
+            "reply": "I might have misunderstood 🤔 You can ask me about Parshant’s profile, education, or work.",
             "intent": "fallback"
         })
 
-    # -------- NORMAL INTENT RESPONSE --------
+    # 🔹 NORMAL RESPONSE
     if intent in intent_response_map:
         return no_cache_response({
             "reply": intent_response_map[intent],
