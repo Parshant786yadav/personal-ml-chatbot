@@ -5,9 +5,7 @@
       "patterns": [
         "Hi",
         "Hello",
-        "Hey",
-        "Hi there",
-        "Hello there"
+        "Hey"
       ],
       "responses": [
         "Hyy! I am Parshant's personal AI assistant. How can I help you?"
@@ -18,7 +16,7 @@
       "tag": "bot_identity",
       "patterns": [
         "who are you",
-        "who r u",
+        "are you parshant's chatboat?",
         "who are uh",
         "who r uh",
         "who you",
@@ -30,10 +28,14 @@
         "r u parshant",
         "is this parshant",
         "who made you",
-        "what do you do"
+        "what do you do",
+        "who are you exactly",
+        "can you tell me about yourself",
+        "what is your purpose",
+        "are you a chatbot for parshant"
       ],
       "responses": [
-        "I am Parshant's personal chatbot, created to share his education, skills, experience, and professional details."
+        "I am Parshant's personal chatbot, parshant created me to share his education, skills, experience, and professional details."
       ]
     },
 
@@ -45,10 +47,8 @@
         "about parshant",
         "who is prashant",
         "who is prshnt",
-        "who is psnt",
-        "parshant?",
-        "parshantt?",
         "prashant info",
+        "give me parshant details",
         "parshant details",
         "parshant profile"
       ],
@@ -62,16 +62,24 @@
       "patterns": [
         "what is parshant qualification",
         "parshant qualification",
-        "qualification?",
+        "qualifications?",
         "what is your qualification",
         "your qualification",
         "education?",
         "educational background",
-        "study?",
-        "what do you study",
+        "tell me about parshant qualifications",
+        
         "what parshant studying",
         "degree?",
-        "which course"
+        "which course",
+        "what is parshant qualification",
+        "parshant educational qualification",
+        "what degree parshant doing",
+        "which course parshant studying",
+        "parshant education details",
+        "parshant academic background",
+        "parshant college course",
+        "parshant degree"
       ],
       "responses": [
         "Parshant is pursuing BTech in Computer Science Engineering with specialization in Artificial Intelligence and Machine Learning. He is currently in 4th year, 7th semester."
@@ -82,8 +90,13 @@
       "tag": "college_details",
       "patterns": [
         "college name",
+        "tell me parshant college name",
+        "tell me about parshant college",
         "which college parshant",
         "where do you study",
+        "in which college parshant study",
+        "parshant college name?",
+        "in which university parshant studying",
         "college?",
         "clg name",
         "st andrews",
