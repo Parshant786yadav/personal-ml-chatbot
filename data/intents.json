@@ -13,30 +13,242 @@
         "Hyy! I am Parshant's personal AI assistant. How can I help you?"
       ]
     },
+
     {
-      "tag": "current_work",
+      "tag": "bot_identity",
       "patterns": [
-        "What parshant doing nowdays?",
-        "What prashant doing nowadays",
-        "What psnt doing nswdays",
-        "What does Parshant do now",
-        "What's parshant's qualifications"
+        "who are you",
+        "who r u",
+        "who are uh",
+        "who r uh",
+        "who you",
+        "what is this chatbot",
+        "what are you",
+        "tum kaun ho",
+        "are you parshant",
+        "are u parshant",
+        "r u parshant",
+        "is this parshant",
+        "who made you",
+        "what do you do"
       ],
       "responses": [
-        "Parshant is currently a BTech CSE (AI & ML) 4th year student, learning DSA and Machine Learning and building real-world projects."
+        "I am Parshant's personal chatbot, created to share his education, skills, experience, and professional details."
       ]
     },
+
     {
-      "tag": "greeting",
+      "tag": "about_parshant",
       "patterns": [
-        "Who is parshant?",
-        "who is prashant?",
-        "parshant kaun hai?",
-        "who parshant",
-        "tell me about parshant"
+        "who is parshant",
+        "tell me about parshant",
+        "about parshant",
+        "who is prashant",
+        "who is prshnt",
+        "who is psnt",
+        "parshant?",
+        "parshantt?",
+        "prashant info",
+        "parshant details",
+        "parshant profile"
       ],
       "responses": [
-        "Parshant is currently a BTech CSE (AI & ML) 4th year student, learning DSA and Machine Learning and building real-world projects.,."
+        "Parshant is a BTech CSE (AI & ML) 4th year student passionate about software development, AI, backend systems, and real-world problem solving."
+      ]
+    },
+
+    {
+      "tag": "qualification",
+      "patterns": [
+        "what is parshant qualification",
+        "parshant qualification",
+        "qualification?",
+        "what is your qualification",
+        "your qualification",
+        "education?",
+        "educational background",
+        "study?",
+        "what do you study",
+        "what parshant studying",
+        "degree?",
+        "which course"
+      ],
+      "responses": [
+        "Parshant is pursuing BTech in Computer Science Engineering with specialization in Artificial Intelligence and Machine Learning. He is currently in 4th year, 7th semester."
+      ]
+    },
+
+    {
+      "tag": "college_details",
+      "patterns": [
+        "college name",
+        "which college parshant",
+        "where do you study",
+        "college?",
+        "clg name",
+        "st andrews",
+        "andrews institute",
+        "college of parshant"
+      ],
+      "responses": [
+        "Parshant studies at St. Andrews Institute of Technology and Management."
+      ]
+    },
+
+    {
+      "tag": "btech_year",
+      "patterns": [
+        "btech year",
+        "engineering year",
+        "college duration",
+        "btech duration",
+        "from which year",
+        "batch?",
+        "college batch",
+        "2022?",
+        "2026?"
+      ],
+      "responses": [
+        "Parshant's BTech duration is from 2022 to 2026."
+      ]
+    },
+
+    {
+      "tag": "current_status",
+      "patterns": [
+        "what parshant doing now",
+        "what are you doing now",
+        "current work",
+        "current status",
+        "nowadays what doing",
+        "present work",
+        "currently?",
+        "abhi kya kar rahe ho",
+        "what r u doing"
+      ],
+      "responses": [
+        "Parshant is currently focusing on DSA, backend development, machine learning, and working as a Software QA Engineer Intern."
+      ]
+    },
+
+    {
+      "tag": "experience_freelance",
+      "patterns": [
+        "freelancing",
+        "freelance work",
+        "web dev experience",
+        "client projects",
+        "any freelancing",
+        "did you do freelancing",
+        "freelance exp"
+      ],
+      "responses": [
+        "Parshant worked as a Freelance Web Developer from Aug 2024 to July 2025, building responsive, fast, and mobile-friendly websites with modern UI/UX."
+      ]
+    },
+
+    {
+      "tag": "experience_ibm",
+      "patterns": [
+        "ibm internship",
+        "ibm intern",
+        "worked at ibm",
+        "ai intern ibm",
+        "ibm experience",
+        "ibm remote internship"
+      ],
+      "responses": [
+        "Parshant worked as an Artificial Intelligence Intern at IBM (Remote) from July 2025 to Aug 2025, using Python and IBM Cloud tools."
+      ]
+    },
+
+    {
+      "tag": "experience_nxcar",
+      "patterns": [
+        "nxcar",
+        "nxcar internship",
+        "qa intern",
+        "software qa engineer",
+        "testing intern",
+        "current internship",
+        "where working now"
+      ],
+      "responses": [
+        "Parshant is currently working as a Software QA Engineer Intern at NxCar (On-site), optimizing backend logic and fixing performance issues."
+      ]
+    },
+
+    {
+      "tag": "skills",
+      "patterns": [
+        "skills",
+        "technical skills",
+        "tech stack",
+        "technologies",
+        "what do you know",
+        "programming skills",
+        "tools?",
+        "languages?"
+      ],
+      "responses": [
+        "Parshant's skills include Python, Frontend Development, Backend Development, APIs, MySQL, and Software Testing."
+      ]
+    },
+
+    {
+      "tag": "age",
+      "patterns": [
+        "age",
+        "how old are you",
+        "parshant age",
+        "your age",
+        "age pls"
+      ],
+      "responses": [
+        "Parshant is 23 years old."
+      ]
+    },
+
+    {
+      "tag": "tenth_details",
+      "patterns": [
+        "10th details",
+        "10th school",
+        "10th percentage",
+        "class 10",
+        "high school",
+        "matric"
+      ],
+      "responses": [
+        "Parshant completed his 10th from Suraj School with 76.6%."
+      ]
+    },
+
+    {
+      "tag": "twelfth_details",
+      "patterns": [
+        "12th details",
+        "12th school",
+        "12th percentage",
+        "intermediate",
+        "senior secondary"
+      ],
+      "responses": [
+        "Parshant completed his 12th from RPS School with 83%."
+      ]
+    },
+
+    {
+      "tag": "cgpa",
+      "patterns": [
+        "cgpa",
+        "current cgpa",
+        "btech cgpa",
+        "grades",
+        "result"
+      ],
+      "responses": [
+        "Parshant's current BTech CGPA is 8.1."
       ]
     }
   ]
