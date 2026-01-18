@@ -1,10 +1,18 @@
 import pickle
 import os
 import string
+from flask import session
 from rapidfuzz import fuzz
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
+app.secret_key = "temporary-chatbot-session-key"
+
+# -------- Simple memory (single-user demo) --------
+last_suggested_intent = None
+
+YES_WORDS = {"yes", "yeah", "y", "yep", "haan", "haa", "ok"}
+NO_WORDS = {"no", "nah", "nope", "nahi"}
 
 # -------- Load ML Model --------
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -41,47 +49,91 @@ def preprocess(sentence):
     sentence = fuzzy_name_normalize(sentence)
     return sentence
 
+
+def respond_with_history(user_msg, bot_reply, intent=None):
+    history = session.get("history", [])
+    history.append({
+        "user": user_msg,
+        "bot": bot_reply
+    })
+    session["history"] = history
+
+    return no_cache_response({
+        "reply": bot_reply,
+        "intent": intent,
+        "history": history   # optional: send to frontend
+    })
+
 # -------- Chat API --------
 @app.route("/chat", methods=["POST"])
 def chat():
-    user_input = request.json.get("message", "")
+    # Initialize history for this session
+    if "history" not in session:
+          session["history"] = []
 
+    global last_suggested_intent
+
+    user_input = request.json.get("message", "")
     if not user_input:
         return no_cache_response({"reply": "Please type something."})
 
     processed = preprocess(user_input)
 
-    # 🔹 Build intent → response map EARLY
+    # -------- Build intent → response map EARLY --------
     intent_response_map = {
         i["tag"]: i["responses"][0] for i in data["intents"]
     }
 
-    # 🔹 PRIORITY RULE: QUALIFICATION
+    # -------- USER CONFIRMATION HANDLING --------
+    if processed in YES_WORDS and last_suggested_intent:
+        reply = intent_response_map[last_suggested_intent]
+        last_suggested_intent = None
+        return respond_with_history(
+            user_input,
+            reply,
+            "confirmation-yes"
+        )
+
+
+    if processed in NO_WORDS and last_suggested_intent:
+        last_suggested_intent = None
+        return respond_with_history(
+            user_input,
+            "Okay 👍 No problem. What would you like to know about Parshant?",
+            "confirmation-no"
+        )
+
+
+    # -------- PRIORITY RULE: QUALIFICATION --------
     if any(word in processed for word in [
         "qualification", "degree", "education", "course", "academic"
     ]):
-        return no_cache_response({
-            "reply": intent_response_map["qualification"],
-            "intent": "qualification-rule"
-        })
+        return respond_with_history(
+            user_input,
+            intent_response_map["qualification"],
+            "qualification-rule"
+        )
 
-    # 🔹 RULE 1: GREETING
+
+    # -------- RULE 1: GREETING --------
     GREETINGS = {"hi", "hello", "hey", "hii", "hyy", "helo"}
 
     if processed.strip() in GREETINGS:
-        return no_cache_response({
-            "reply": "Hyy! I am Parshant's personal AI assistant. How can I help you?",
-            "intent": "greeting-rule"
-        })
+        return respond_with_history(
+            user_input,
+            "Hyy! I am Parshant's personal AI assistant. How can I help you?",
+            "greeting-rule"
+        )
 
-    # 🔹 RULE 2: SHORT QUESTIONS
+
+    # -------- RULE 2: SHORT QUESTIONS --------
     if "parshant" in processed and "how" in processed:
         return no_cache_response({
             "reply": "Parshant is doing well and currently focusing on his studies and projects.",
             "intent": "rule_how_is"
         })
 
-    # 🔹 ML STARTS HERE
+    # -------- ML STARTS HERE --------
     X = vectorizer.transform([processed])
     probs = model.predict_proba(X)[0]
     intent = model.classes_[probs.argmax()]
@@ -92,26 +144,30 @@ def chat():
     print("INTENT:", intent)
     print("PROBABILITY:", max_prob)
 
-    # 🔹 ML GREETING BACKUP
-    if intent == "greeting":
-        return no_cache_response({
-            "reply": intent_response_map["greeting"],
-            "intent": intent
-        })
-
-    # 🔹 FALLBACK
+    # -------- SMART FALLBACK WITH SUGGESTION --------
     if max_prob < 0.2:
+        last_suggested_intent = intent
+
+        example_question = next(
+            i["patterns"][0]
+            for i in data["intents"]
+            if i["tag"] == intent
+        )
+
         return no_cache_response({
-            "reply": "I might have misunderstood 🤔 You can ask me about Parshant’s profile, education, or work.",
-            "intent": "fallback"
+            "reply": f"I’m not fully sure 🤔 Did you mean: \"{example_question}\" ?",
+            "intent": "clarification",
+            "suggested_intent": intent
         })
 
-    # 🔹 NORMAL RESPONSE
+    # -------- NORMAL RESPONSE --------
     if intent in intent_response_map:
-        return no_cache_response({
-            "reply": intent_response_map[intent],
-            "intent": intent
-        })
+        return respond_with_history(
+    user_input,
+    intent_response_map[intent],
+    intent
+)
+
 
     return no_cache_response({"reply": "Sorry, I didn’t understand that."})
 

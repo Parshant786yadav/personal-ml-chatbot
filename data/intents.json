@@ -19,7 +19,7 @@
         "are you parshant's chatboat?",
         "who are uh",
         "who r uh",
-        "who you",
+        
         "what is this chatbot",
         "what are you",
         "tum kaun ho",
@@ -91,7 +91,7 @@
       "patterns": [
         "college name",
         "tell me parshant college name",
-        "tell me about parshant college",
+        
         "which college parshant",
         "where do you study",
         "in which college parshant study",
@@ -113,6 +113,7 @@
       "patterns": [
         "btech year",
         "engineering year",
+        "year of graduation",
         "college duration",
         "btech duration",
         "from which year",
@@ -195,6 +196,9 @@
       "tag": "skills",
       "patterns": [
         "skills",
+        
+        "how much skills parshant has?",
+        "parshant skills?",
         "technical skills",
         "tech stack",
         "technologies",
@@ -204,7 +208,7 @@
         "languages?"
       ],
       "responses": [
-        "Parshant's skills include Python, Frontend Development, Backend Development, APIs, MySQL, and Software Testing."
+        "Parshant's skills include Python, Frontend Development, Backend Development, MySQL and Machine learning."
       ]
     },
 
@@ -212,6 +216,8 @@
       "tag": "age",
       "patterns": [
         "age",
+        "tell me parshant age",
+        "what is parshant age?",
         "how old are you",
         "parshant age",
         "your age",
@@ -226,11 +232,14 @@
       "tag": "tenth_details",
       "patterns": [
         "10th details",
+        
+        "parshant 10th percentage?",
         "10th school",
         "10th percentage",
         "class 10",
         "high school",
-        "matric"
+        "can you tell me parshant 10th percentage",
+        "whats parshant 10th percentage"
       ],
       "responses": [
         "Parshant completed his 10th from Suraj School with 76.6%."
@@ -240,6 +249,7 @@
     {
       "tag": "twelfth_details",
       "patterns": [
+        
         "12th details",
         "12th school",
         "12th percentage",
