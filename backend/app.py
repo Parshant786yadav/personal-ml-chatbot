@@ -5,6 +5,14 @@ from flask import session
 from rapidfuzz import fuzz
 from flask import Flask, request, jsonify
 
+INTENT_KEYWORDS = {
+    "skills": {"skill", "skills", "technologies", "tech"},
+    "qualification": {"qualification", "degree", "education", "course"},
+    "projects": {"project", "projects", "work"},
+    "experience": {"experience", "internship", "job"},
+    "parshant" : {"prashant", "prshnt", "psnt", "prasant"}
+}
+
 app = Flask(__name__)
 app.secret_key = "temporary-chatbot-session-key"
 
@@ -49,7 +57,60 @@ def preprocess(sentence):
     sentence = fuzzy_name_normalize(sentence)
     return sentence
 
+# -------- Keyword-based Intent Recommendation --------
+STOPWORDS = {
+    "tell", "me", "about", "who", "is", "are", "the", "a", "an", "please"
+}
+LAST_WORD_WINDOW = 3
+def recommend_intent_by_keywords(processed, intents):
+    words = processed.split()
 
+    # Take last N meaningful words
+    meaningful_words = [w for w in words if w not in STOPWORDS]
+    tail_words = meaningful_words[-LAST_WORD_WINDOW:]
+
+    best_intent = None
+    best_score = 0
+
+    for intent in intents:
+        tag = intent["tag"]
+        patterns = intent["patterns"]
+
+        score = 0
+
+        for p in patterns:
+            p_words = p.lower().split()
+
+            # 🔥 reverse matching (last word gets highest weight)
+            for idx, w in enumerate(reversed(tail_words)):
+                if w in p_words:
+                    score += (LAST_WORD_WINDOW - idx) * 3
+
+        if score > best_score:
+            best_score = score
+            best_intent = tag
+
+    return best_intent if best_score > 0 else None
+
+def last_words_match_any_intent(processed, intents, window=3):
+    words = processed.split()
+
+    # remove very common filler words
+    STOPWORDS = {"tell", "me", "about", "who", "is", "are", "the", "a", "an"}
+    meaningful = [w for w in words if w not in STOPWORDS]
+
+    tail_words = meaningful[-window:]
+
+    for intent in intents:
+        for pattern in intent["patterns"]:
+            p_words = pattern.lower().split()
+            if any(w in p_words for w in tail_words):
+                return intent["tag"]
+
+    return None
+
+
+# -------- Response with History --------
 def respond_with_history(user_msg, bot_reply, intent=None):
     history = session.get("history", [])
     history.append({
@@ -61,17 +122,17 @@ def respond_with_history(user_msg, bot_reply, intent=None):
     return no_cache_response({
         "reply": bot_reply,
         "intent": intent,
-        "history": history   # optional: send to frontend
+        "history": history
     })
 
 # -------- Chat API --------
 @app.route("/chat", methods=["POST"])
 def chat():
+    global last_suggested_intent
+
     # Initialize history for this session
     if "history" not in session:
-          session["history"] = []
-
-    global last_suggested_intent
+        session["history"] = []
 
     user_input = request.json.get("message", "")
     if not user_input:
@@ -79,7 +140,7 @@ def chat():
 
     processed = preprocess(user_input)
 
-    # -------- Build intent → response map EARLY --------
+    # -------- Build intent → response map --------
     intent_response_map = {
         i["tag"]: i["responses"][0] for i in data["intents"]
     }
@@ -88,12 +149,7 @@ def chat():
     if processed in YES_WORDS and last_suggested_intent:
         reply = intent_response_map[last_suggested_intent]
         last_suggested_intent = None
-        return respond_with_history(
-            user_input,
-            reply,
-            "confirmation-yes"
-        )
-
+        return respond_with_history(user_input, reply, "confirmation-yes")
 
     if processed in NO_WORDS and last_suggested_intent:
         last_suggested_intent = None
@@ -102,7 +158,6 @@ def chat():
             "Okay 👍 No problem. What would you like to know about Parshant?",
             "confirmation-no"
         )
-
 
     # -------- PRIORITY RULE: QUALIFICATION --------
     if any(word in processed for word in [
@@ -114,10 +169,8 @@ def chat():
             "qualification-rule"
         )
 
-
     # -------- RULE 1: GREETING --------
     GREETINGS = {"hi", "hello", "hey", "hii", "hyy", "helo"}
-
     if processed.strip() in GREETINGS:
         return respond_with_history(
             user_input,
@@ -125,13 +178,15 @@ def chat():
             "greeting-rule"
         )
 
-
     # -------- RULE 2: SHORT QUESTIONS --------
     if "parshant" in processed and "how" in processed:
-        return no_cache_response({
-            "reply": "Parshant is doing well and currently focusing on his studies and projects.",
-            "intent": "rule_how_is"
-        })
+        return respond_with_history(
+            user_input,
+            "Parshant is doing well and currently focusing on his studies and projects.",
+            "rule_how_is"
+        )
+    
+    
 
     # -------- ML STARTS HERE --------
     X = vectorizer.transform([processed])
@@ -144,33 +199,46 @@ def chat():
     print("INTENT:", intent)
     print("PROBABILITY:", max_prob)
 
-    # -------- SMART FALLBACK WITH SUGGESTION --------
+    # -------- SMART FALLBACK WITH KEYWORD-AWARE SUGGESTION --------
     if max_prob < 0.2:
-        last_suggested_intent = intent
+        # 🔹 Use keyword logic ONLY for suggestion
+        suggested_intent = recommend_intent_by_keywords(
+            processed, data["intents"]
+        )
+
+        # fallback to ML intent if keyword logic finds nothing
+        if not suggested_intent:
+            suggested_intent = intent
+
+        last_suggested_intent = suggested_intent
 
         example_question = next(
             i["patterns"][0]
             for i in data["intents"]
-            if i["tag"] == intent
+            if i["tag"] == suggested_intent
         )
 
-        return no_cache_response({
-            "reply": f"I’m not fully sure 🤔 Did you mean: \"{example_question}\" ?",
-            "intent": "clarification",
-            "suggested_intent": intent
-        })
+        return respond_with_history(
+            user_input,
+            f"I’m not fully sure 🤔 Did you mean: \"{example_question}\" ?",
+            "clarification"
+        )
+
 
     # -------- NORMAL RESPONSE --------
     if intent in intent_response_map:
         return respond_with_history(
-    user_input,
-    intent_response_map[intent],
-    intent
-)
+            user_input,
+            intent_response_map[intent],
+            intent
+        )
 
-
-    return no_cache_response({"reply": "Sorry, I didn’t understand that."})
+    return respond_with_history(
+        user_input,
+        "Sorry, I didn’t understand that.",
+        "fallback"
 
 # -------- Run Server --------
+    )
 if __name__ == "__main__":
     app.run(debug=True)
