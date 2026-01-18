@@ -1,6 +1,10 @@
 import pickle
 import os
 import string
+from spellchecker import SpellChecker
+
+spell = SpellChecker()
+
 from flask import Flask, request, jsonify
 
 app = Flask(__name__)
@@ -16,7 +20,14 @@ with open(model_path, "rb") as f:
 def preprocess(sentence):
     sentence = sentence.lower()
     sentence = sentence.translate(str.maketrans('', '', string.punctuation))
-    return sentence
+
+    corrected_words = []
+    for word in sentence.split():
+        corrected_words.append(spell.correction(word))
+
+    corrected_sentence = " ".join(corrected_words)
+    return corrected_sentence
+
 
 # -------- Chat API --------
 @app.route("/chat", methods=["POST"])

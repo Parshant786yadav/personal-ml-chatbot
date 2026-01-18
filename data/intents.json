@@ -245,7 +245,9 @@
         "current cgpa",
         "btech cgpa",
         "grades",
-        "result"
+        "result",
+        "btech score",
+        "btech percentage"
       ],
       "responses": [
         "Parshant's current BTech CGPA is 8.1."
