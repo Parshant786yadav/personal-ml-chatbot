@@ -93,13 +93,13 @@
         "tell me parshant college name",
         
         "which college parshant",
-        "where do you study",
+        
         "in which college parshant study",
         "parshant college name?",
         "in which university parshant studying",
         "college?",
         "clg name",
-        "st andrews",
+        
         "andrews institute",
         "college of parshant"
       ],
@@ -136,9 +136,9 @@
         "current status",
         "nowadays what doing",
         "present work",
-        "currently?",
-        "abhi kya kar rahe ho",
-        "what r u doing"
+        "currently?"
+        
+        
       ],
       "responses": [
         "Parshant is currently focusing on DSA, backend development, machine learning, and working as a Software QA Engineer Intern."
@@ -153,7 +153,7 @@
         "web dev experience",
         "client projects",
         "any freelancing",
-        "did you do freelancing",
+        "did parshant do freelancing",
         "freelance exp"
       ],
       "responses": [
@@ -185,7 +185,7 @@
         "software qa engineer",
         "testing intern",
         "current internship",
-        "where working now"
+        "where parshant working now"
       ],
       "responses": [
         "Parshant is currently working as a Software QA Engineer Intern at NxCar (On-site), optimizing backend logic and fixing performance issues."

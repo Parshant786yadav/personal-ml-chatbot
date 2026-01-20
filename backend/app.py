@@ -178,7 +178,7 @@ def chat():
             "greeting-rule"
         )
 
-    # -------- RULE 2: SHORT QUESTIONS --------
+    # -------- RULE 2: SHORT QUESTIONSS --------
     if "parshant" in processed and "how" in processed:
         return respond_with_history(
             user_input,
