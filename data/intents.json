@@ -60,24 +60,17 @@
     {
       "tag": "qualification",
       "patterns": [
-        "what is parshant qualification",
+        "what is the qualification of parshant",
         "qualification",
         "qualifications?",
-        "what is your qualification",
-        "your qualification",
-        "education?",
-        "educational background",
-        "qualifications",
-        
+        "education?",       
         "what parshant studying",
         "degree?",
-        "which course",
         "what is parshant qualification",
         "educational qualification",
         "what degree parshant doing",
         "which course parshant studying",
         "parshant education details",
-        "parshant academic background",
         "parshant college course",
         "parshant degree"
       ],
@@ -132,8 +125,6 @@
       "patterns": [
         "what parshant doing now",
         "what are you doing now",
-        "current work",
-        "current status",
         "nowadays what doing",
         "present work",
         "currently?"
@@ -141,7 +132,7 @@
         
       ],
       "responses": [
-        "Parshant is currently focusing on DSA, backend development, machine learning, and working as a Software QA Engineer Intern."
+        "Parshant is currently focusing on backend development, machine learning, and working as a Software QA Engineer at Nxcar."
       ]
     },
 
@@ -162,6 +153,18 @@
     },
 
     {
+      "tag": "where",
+      "patterns": [
+        "where is parshant?",
+        "where is he now?",
+        "where is parshant right now?"
+      ],
+      "responses": [
+        "Parshant is busy right now 😎"
+      ]
+    },
+
+    {
       "tag": "experience_ibm",
       "patterns": [
         "ibm internship",
@@ -177,18 +180,35 @@
     },
 
     {
-      "tag": "experience_nxcar",
+      "tag": "nxcar_job",
       "patterns": [
         "nxcar",
         "nxcar internship",
         "qa intern",
         "software qa engineer",
-        "testing intern",
+        "testing internship",
         "current internship",
+        "tell me about parshant current job",
+        "Parshant job",
+        "job",
         "where parshant working now"
       ],
       "responses": [
-        "Parshant is currently working as a Software QA Engineer Intern at NxCar (On-site), optimizing backend logic and fixing performance issues."
+        "Parshant is currently working as a Software QA Engineer at NxCar (On-site), optimizing backend logic, fixing performance issues and Automate Webiste using Python Scripts"
+      ]
+    },
+
+    {
+      "tag": "Contact_details",
+      "patterns": [
+        "Give me contact details of parshant",
+        "i want to contact parshant",
+        "Contact Details",
+        "Can i contact to parshant?",
+        "i want to talk to parshant"
+      ],
+      "responses": [
+        "You can contact Parshant via email: Parshant786yadav@gmail.com or phone: +91-8826448907"
       ]
     },
 
@@ -229,7 +249,7 @@
     },
 
     {
-      "tag": "tenth_details",
+      "tag": "10th_details",
       "patterns": [
         "10th details",
         
@@ -247,10 +267,10 @@
     },
 
     {
-      "tag": "twelfth_details",
+      "tag": "12th_details",
       "patterns": [
-        
         "12th details",
+        "12th",
         "12th school",
         "12th percentage",
         "intermediate",
