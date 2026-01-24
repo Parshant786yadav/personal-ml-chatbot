@@ -60,7 +60,7 @@
     {
       "tag": "qualification",
       "patterns": [
-        "what is the qualification of parshant",
+        "what is the qualification",
         "qualification",
         "qualifications?",
         "education?",       
@@ -70,9 +70,9 @@
         "educational qualification",
         "what degree parshant doing",
         "which course parshant studying",
-        "parshant education details",
-        "parshant college course",
-        "parshant degree"
+        "education details",
+        "college course",
+        "degree"
       ],
       "responses": [
         "Parshant is pursuing BTech in Computer Science Engineering with specialization in Artificial Intelligence and Machine Learning. He is currently in 4th year, 7th semester."
