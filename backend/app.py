@@ -4,6 +4,8 @@ import string
 from flask import session
 from rapidfuzz import fuzz
 from flask import Flask, request, jsonify
+from flask_cors import CORS
+
 
 INTENT_KEYWORDS = {
     "skills": {"skill", "skills", "technologies", "tech"},
@@ -14,6 +16,7 @@ INTENT_KEYWORDS = {
 }
 
 app = Flask(__name__)
+CORS(app)
 app.secret_key = "temporary-chatbot-session-key"
 
 # -------- Simple memory (single-user demo) --------
